@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumeForge — Create Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--ink:#0b0b12;--gold:#d4a843;--gold2:#f0c85a;--goldDim:rgba(212,168,67,0.12);--cream:#ede8dc;--muted:#8a8070;--border:rgba(212,168,67,0.2);--red:#e05555;--green:#4ecb7a;}
+html{height:100%;}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--cream);min-height:100%;overflow-y:auto;overflow-x:hidden;}
+#bg{position:fixed;inset:0;z-index:0;}
+body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.35;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");}
+.page{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px 20px;}
+.card{width:100%;max-width:460px;background:rgba(11,11,18,0.82);backdrop-filter:blur(30px);border:1px solid var(--border);border-radius:20px;padding:44px 40px 40px;position:relative;overflow:hidden;animation:fadeUp .7s ease;}
+.card::before{content:'';position:absolute;top:-1px;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.wordmark{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:20px;}.wordmark span{color:var(--gold);}
+.card h1{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;line-height:1.1;color:#fff;margin-bottom:5px;}
+.card .sub{font-size:.86rem;color:var(--muted);margin-bottom:26px;}
+.field{margin-bottom:13px;}
+.field label{display:block;font-size:.71rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.field input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-family:'Outfit',sans-serif;font-size:.9rem;padding:12px 15px;outline:none;transition:all .25s ease;}
+.field input::placeholder{color:rgba(255,255,255,0.25);}
+.field input:focus{border-color:var(--gold);background:rgba(212,168,67,0.06);box-shadow:0 0 0 3px rgba(212,168,67,0.1);}
+.strength-wrap{height:5px;background:rgba(255,255,255,0.08);border-radius:50px;margin-top:7px;overflow:hidden;}
+.strength-bar{height:100%;border-radius:50px;width:0;transition:width .4s ease,background .4s ease;}
+.strength-txt{font-size:.72rem;margin-top:4px;min-height:16px;}
+.btn-main{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#d4a843,#b8872a);color:#0b0b12;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.04em;border:none;border-radius:10px;cursor:pointer;margin-top:20px;transition:all .3s ease;box-shadow:0 6px 22px rgba(212,168,67,0.3);}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 10px 34px rgba(212,168,67,0.45);}
+.btn-main:active{transform:scale(.98);}
+.divider{display:flex;align-items:center;gap:14px;margin:18px 0;color:rgba(255,255,255,0.18);font-size:.8rem;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.1);}
+.switch-link{text-align:center;font-size:.84rem;color:var(--muted);}
+.switch-link a{color:var(--gold);text-decoration:none;font-weight:600;cursor:pointer;}
+.switch-link a:hover{color:var(--gold2);}
+.msg{border-radius:8px;padding:10px 14px;font-size:.83rem;margin-bottom:12px;display:none;line-height:1.4;}
+.msg.error{background:rgba(224,85,85,.15);border:1px solid rgba(224,85,85,.3);color:#ff8080;}
+.msg.success{background:rgba(78,203,122,.15);border:1px solid rgba(78,203,122,.3);color:#6fffaa;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="page">
+  <div class="card">
+    <div class="wordmark">Resume<span>Forge</span></div>
+    <h1>Create your<br>account.</h1>
+    <p class="sub">Start building resumes that get you noticed.</p>
+    <div class="msg" id="msg"></div>
+    <div class="field"><label>Username</label><input id="nu" type="text" placeholder="Choose a username" autocomplete="username"></div>
+    <div class="field">
+      <label>Password</label>
+      <input id="np" type="password" placeholder="Create a strong password" oninput="strength(this.value)" autocomplete="new-password">
+      <div class="strength-wrap"><div class="strength-bar" id="sb"></div></div>
+      <div class="strength-txt" id="st"></div>
+    </div>
+    <div class="field"><label>Confirm Password</label><input id="cp" type="password" placeholder="Repeat your password" autocomplete="new-password"></div>
+    <button class="btn-main" id="sbtn" onclick="doSignup()">Create Account →</button>
+    <div class="divider">or</div>
+    <div class="switch-link">Already have an account? <a href="login.html">Sign in</a></div>
+  </div>
+</div>
+<script>
+const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
+let W,H,pts=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+class P{constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.8+.4;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.a=Math.random()*.35+.07;}
+update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W)this.vx*=-1;if(this.y<0||this.y>H)this.vy*=-1;}
+draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(212,168,67,${this.a})`;ctx.fill();}}
+for(let i=0;i<90;i++)pts.push(new P());
+(function anim(){requestAnimationFrame(anim);
+  ctx.fillStyle='#0b0b12';ctx.fillRect(0,0,W,H);
+  const g=ctx.createRadialGradient(W*.8,H*.15,0,W*.8,H*.15,W*.45);g.addColorStop(0,'rgba(212,168,67,0.06)');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  pts.forEach(p=>{p.update();p.draw();});
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){ctx.strokeStyle=`rgba(212,168,67,${.06*(1-d/100)})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();}}
+})();
+function strength(v){const bar=document.getElementById('sb'),txt=document.getElementById('st');let s=0;if(v.length>=6)s++;if(v.length>=10)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;const cols=['','#e05555','#e0955a','#d4a843','#4ecb7a','#4ecb7a'];const labs=['','Weak','Fair','Good','Strong','Very Strong'];const ws=['0%','20%','40%','60%','80%','100%'];bar.style.width=ws[s];bar.style.background=cols[s];txt.textContent=v?labs[s]:'';txt.style.color=cols[s];}
+function showMsg(text,type){const m=document.getElementById('msg');m.className='msg '+type;m.textContent=text;m.style.display='block';}
+function doSignup(){
+  const u=document.getElementById('nu').value.trim();
+  const p=document.getElementById('np').value;
+  const c=document.getElementById('cp').value;
+  document.getElementById('msg').style.display='none';
+  if(!u){showMsg('❌ Please enter a username.','error');return;}
+  if(p.length<6){showMsg('❌ Password must be at least 6 characters.','error');return;}
+  if(p!==c){showMsg('❌ Passwords do not match.','error');return;}
+  localStorage.setItem('rf_user',u);
+  localStorage.setItem('rf_pass',p);
+  showMsg('✅ Account created! Taking you to login...','success');
+  const btn=document.getElementById('sbtn');
+  btn.textContent='✓ Done!';
+  btn.style.background='linear-gradient(135deg,#4ecb7a,#2da856)';
+  btn.disabled=true;
+  setTimeout(()=>window.location.href='login.html',1200);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')doSignup();});
+</script>
+</body>
+</html>

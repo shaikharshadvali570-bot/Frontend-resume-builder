@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumeForge — Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--ink:#0b0b12;--gold:#d4a843;--gold2:#f0c85a;--goldDim:rgba(212,168,67,0.1);--cream:#ede8dc;--muted:#7a7060;--border:rgba(212,168,67,0.16);--border-sub:rgba(255,255,255,0.07);--card:rgba(255,255,255,0.03);--inp:rgba(255,255,255,0.05);--blk:#14131c;--red:#e05555;--green:#4ecb7a;--blue:#5a9bf0;}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+#bg{position:fixed;inset:0;z-index:0;}
+body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.35;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:13px 36px;background:rgba(11,11,18,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:9px;}.nav-logo span{color:var(--gold);}
+.nav-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:pulse 2.5s infinite;flex-shrink:0;}
+.nav-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.nbtn{font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:7px;cursor:pointer;transition:all .25s;border:1px solid var(--border);background:transparent;color:var(--cream);}
+.nbtn:hover{border-color:var(--gold);color:var(--gold);}
+.nbtn.gold{background:linear-gradient(135deg,var(--gold),#b8872a);color:#0b0b12;border:none;box-shadow:0 4px 14px rgba(212,168,67,0.22);}
+.nbtn.gold:hover{transform:translateY(-1px);box-shadow:0 7px 22px rgba(212,168,67,0.35);}
+.nbtn.blue{background:linear-gradient(135deg,#5a9bf0,#2d6de0);color:#fff;border:none;}
+.nbtn.teal{background:linear-gradient(135deg,#2b8f7a,#1a6b5a);color:#fff;border:none;}
+
+/* LAYOUT */
+.container{display:grid;grid-template-columns:460px 1fr;min-height:calc(100vh - 52px);position:relative;z-index:2;}
+
+/* FORM */
+.form-section{padding:28px 26px 60px;border-right:1px solid var(--border);overflow-y:auto;max-height:calc(100vh - 52px);scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.form-section::-webkit-scrollbar{width:4px;}.form-section::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.form-section>h2{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,var(--cream) 30%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:22px;}
+.form-section h3{font-family:'Outfit',sans-serif;font-size:.69rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:22px 0 10px;display:flex;align-items:center;gap:9px;}
+.form-section h3::after{content:'';flex:1;height:1px;background:var(--border);}
+
+input[type=text],input[type=email],textarea{width:100%;background:var(--inp);border:1px solid var(--border-sub);border-radius:8px;color:var(--cream);font-family:'Outfit',sans-serif;font-size:.88rem;padding:10px 13px;margin-bottom:9px;outline:none;resize:vertical;transition:all .22s ease;}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.2);font-size:.85rem;}
+input:focus,textarea:focus{border-color:var(--gold);background:rgba(212,168,67,0.05);box-shadow:0 0 0 3px rgba(212,168,67,0.09);}
+
+.block{background:var(--blk);border:1px solid var(--border-sub);border-radius:8px;padding:12px;margin-bottom:10px;animation:slideIn .28s ease;transition:border-color .22s;}
+.block:hover{border-color:rgba(212,168,67,0.2);}
+.block input,.block textarea{background:rgba(255,255,255,0.04);}
+
+/* Buttons */
+button{font-family:'Outfit',sans-serif;font-size:.84rem;font-weight:600;padding:9px 18px;border:none;border-radius:8px;cursor:pointer;transition:all .25s ease;position:relative;overflow:hidden;}
+button::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);opacity:0;transition:opacity .22s;}
+button:hover::after{opacity:1;}
+button:active{transform:scale(.97);}
+
+.btn-gen{width:100%;margin-top:22px;background:linear-gradient(135deg,var(--gold),#9a6c22);color:#0b0b12;font-size:.91rem;font-weight:700;padding:13px;letter-spacing:.04em;box-shadow:0 5px 20px rgba(212,168,67,0.25);}
+.btn-gen:hover{transform:translateY(-2px);box-shadow:0 9px 28px rgba(212,168,67,0.4);}
+.btn-pdf{width:100%;margin-top:9px;background:linear-gradient(135deg,#5a9bf0,#2d6de0);color:#fff;padding:11px;}
+.btn-pdf:hover{transform:translateY(-2px);}
+.btn-docx{width:100%;margin-top:9px;background:linear-gradient(135deg,#2b8f7a,#1a6b5a);color:#fff;padding:11px;}
+.btn-docx:hover{transform:translateY(-2px);}
+.btn-dark{width:100%;margin-top:9px;background:var(--inp);border:1px solid var(--border);color:var(--cream);}
+.btn-dark:hover{border-color:var(--gold);color:var(--gold);}
+.btn-add{width:100%;margin-top:7px;background:transparent;border:1px dashed rgba(212,168,67,0.28);color:var(--gold);font-size:.81rem;}
+.btn-add:hover{background:var(--goldDim);border-color:var(--gold);border-style:solid;}
+.btn-rm{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.18);color:var(--red);padding:5px 12px;font-size:.76rem;margin-top:5px;width:auto;}
+.btn-rm:hover{background:rgba(224,85,85,.2);}
+
+/* CANVAS */
+.resume-canvas{overflow-y:auto;max-height:calc(100vh - 52px);padding:30px 26px;display:flex;justify-content:center;align-items:flex-start;background:repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(255,255,255,0.01) 23px),repeating-linear-gradient(90deg,transparent,transparent 22px,rgba(255,255,255,0.01) 23px);}
+
+/* RESUME */
+.resume{background:#fff;color:#111;width:100%;max-width:660px;min-height:840px;padding:44px 50px;border-radius:2px;box-shadow:0 30px 80px rgba(0,0,0,0.7),0 0 0 1px rgba(212,168,67,0.15);font-family:'Outfit','Arial',sans-serif;font-size:.875rem;line-height:1.68;animation:fadeUp .7s ease;transition:all .4s ease;}
+.resume h2{text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.95rem;font-weight:700;color:#0a0a1a;letter-spacing:-.02em;margin:0 0 5px;}
+#r-contact{text-align:center;font-size:.8rem;color:#555;margin-bottom:0;}
+#r-contact a{color:#2563eb;}
+.resume section{margin-top:16px;}
+.resume h3{font-family:'Outfit',sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#333;margin:0 0 7px;padding-bottom:4px;border-bottom:1.5px solid #e0e0e0;}
+.skill-badge{display:inline-block;background:#1e3a8a;color:#fff;padding:3px 12px;border-radius:20px;margin:2px;font-size:.74rem;font-family:'JetBrains Mono',monospace;}
+.exp-item{margin-bottom:11px;}.exp-item strong{color:#0a0a1a;}
+.exp-item ul{margin-top:3px;padding-left:16px;}.exp-item ul li{color:#333;font-size:.83rem;}
+a{color:#2563eb;text-decoration:none;}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(14,13,22,0.95);border:1px solid var(--border);border-left:3px solid var(--gold);color:var(--cream);padding:11px 17px;border-radius:8px;font-size:.84rem;box-shadow:0 20px 50px rgba(0,0,0,0.5);z-index:9999;animation:fadeUp .3s ease;min-width:210px;}
+.toast.success{border-left-color:var(--green);}
+.toast.error{border-left-color:var(--red);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-14px);}to{opacity:1;transform:translateX(0);}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,168,67,0);}50%{box-shadow:0 0 0 5px rgba(212,168,67,0.14);}}
+@media(max-width:860px){.container{grid-template-columns:1fr;}.form-section{max-height:none;border-right:none;border-bottom:1px solid var(--border);}.resume-canvas{max-height:none;padding:18px 12px;}.nav-logo span,.nav-dot{display:inline;}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<nav>
+  <div class="nav-logo"><div class="nav-dot"></div>Resume<span>Forge</span></div>
+  <div class="nav-btns">
+    <button class="nbtn gold" onclick="generateResume()">✨ Generate</button>
+    <button class="nbtn blue" onclick="downloadPDF()">📄 PDF</button>
+    <button class="nbtn teal" onclick="downloadDOCX()">📝 DOCX</button>
+    <button class="nbtn" onclick="toggleDarkMode()" id="darkBtn">☀️</button>
+    <button class="nbtn" onclick="window.location.href='dashboard.html'">← Dashboard</button>
+  </div>
+</nav>
+
+<div class="container">
+<div class="form-section">
+<h2>Build Your Resume</h2>
+
+<input type="text" id="name" placeholder="Full Name">
+<input type="email" id="email" placeholder="Email">
+<input type="text" id="phone" placeholder="Phone">
+<input type="text" id="linkedin" placeholder="LinkedIn URL">
+<input type="text" id="github" placeholder="GitHub URL">
+<textarea id="summary" placeholder="Professional Summary" rows="4"></textarea>
+
+<h3>Education</h3>
+<div id="education-section">
+<div class="block edu-block">
+<input type="text" placeholder="Degree">
+<input type="text" placeholder="University">
+<input type="text" placeholder="Year">
+</div>
+</div>
+<button class="btn-add" onclick="addEducation()">+ Add Education</button>
+
+<h3>Experience</h3>
+<div id="experience-section">
+<div class="block exp-block">
+<input type="text" placeholder="Job Title">
+<input type="text" placeholder="Company">
+<textarea placeholder="Responsibilities (one per line)"></textarea>
+</div>
+</div>
+<button class="btn-add" onclick="addExperience()">+ Add Experience</button>
+
+<h3>Projects / Internships</h3>
+<div id="projects-section">
+<div class="block project-block">
+<input type="text" placeholder="Project Title / Internship Role">
+<input type="text" placeholder="Organization">
+<textarea placeholder="Description (one per line)"></textarea>
+</div>
+</div>
+<button class="btn-add" onclick="addProject()">+ Add Project</button>
+
+<h3>Certifications</h3>
+<textarea id="certifications" placeholder="One per line" rows="3"></textarea>
+
+<h3>Achievements</h3>
+<textarea id="achievements" placeholder="One per line" rows="3"></textarea>
+
+<h3>Languages</h3>
+<input type="text" id="languages" placeholder="Comma separated">
+
+<h3>Skills</h3>
+<textarea id="skills" placeholder="Comma separated" rows="2"></textarea>
+
+<button class="btn-gen" onclick="generateResume()">✨ Generate Resume</button>
+<button class="btn-pdf" onclick="downloadPDF()">📄 Download PDF</button>
+<button class="btn-docx" onclick="downloadDOCX()">📝 Download DOCX</button>
+<button class="btn-dark" onclick="toggleDarkMode()">☀️ Toggle Dark Mode</button>
+</div>
+
+<div class="resume-canvas">
+<div id="resume" class="resume">
+<h2 id="r-name">Your Name</h2>
+<p id="r-contact">Email | Phone | LinkedIn | GitHub</p>
+<section><h3>Professional Summary</h3><p id="r-summary" style="color:#666">Your summary will appear here after generating.</p></section>
+<section><h3>Skills</h3><div id="r-skills"><span class="skill-badge">Your</span><span class="skill-badge">Skills</span><span class="skill-badge">Here</span></div></section>
+<section><h3>Work Experience</h3><div id="r-experience"><p style="color:#aaa">Your experience will appear here.</p></div></section>
+<section><h3>Projects / Internships</h3><div id="r-projects"><p style="color:#aaa">Your projects will appear here.</p></div></section>
+<section><h3>Education</h3><div id="r-education"><p style="color:#aaa">Your education will appear here.</p></div></section>
+<section><h3>Certifications</h3><ul id="r-certifications"><li style="color:#aaa">Certifications will appear here.</li></ul></section>
+<section><h3>Achievements</h3><ul id="r-achievements"><li style="color:#aaa">Achievements will appear here.</li></ul></section>
+<section><h3>Languages</h3><div id="r-languages" style="color:#aaa">Languages will appear here.</div></section>
+</div>
+</div>
+</div>
+
+<script>
+// Auth guard
+if(!localStorage.getItem('rf_session'))window.location.href='login.html';
+
+/* ===== YOUR ORIGINAL FUNCTIONS ===== */
+function nameField(id){return document.getElementById(id).value.trim();}
+
+function addEducation(){
+  const b=document.createElement('div');b.className='block edu-block';
+  b.innerHTML=`<input type="text" placeholder="Degree"><input type="text" placeholder="University"><input type="text" placeholder="Year"><button class="btn-rm" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById('education-section').appendChild(b);
+}
+function addExperience(){
+  const b=document.createElement('div');b.className='block exp-block';
+  b.innerHTML=`<input type="text" placeholder="Job Title"><input type="text" placeholder="Company"><textarea placeholder="Responsibilities (one per line)"></textarea><button class="btn-rm" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById('experience-section').appendChild(b);
+}
+function addProject(){
+  const b=document.createElement('div');b.className='block project-block';
+  b.innerHTML=`<input type="text" placeholder="Project Title / Internship Role"><input type="text" placeholder="Organization"><textarea placeholder="Description (one per line)"></textarea><button class="btn-rm" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById('projects-section').appendChild(b);
+}
+
+function generateResume(){
+  document.getElementById('r-name').innerText=nameField('name')||'Your Name';
+  let contact='';
+  if(nameField('email'))contact+=nameField('email')+' | ';
+  if(nameField('phone'))contact+=nameField('phone')+' | ';
+  if(nameField('linkedin'))contact+=`<a href="${nameField('linkedin')}" target="_blank">LinkedIn</a> | `;
+  if(nameField('github'))contact+=`<a href="${nameField('github')}" target="_blank">GitHub</a>`;
+  document.getElementById('r-contact').innerHTML=contact.replace(/\|\s*$/,'');
+  document.getElementById('r-summary').innerText=nameField('summary');
+  const skills=nameField('skills').split(',').map(s=>s.trim()).filter(Boolean);
+  document.getElementById('r-skills').innerHTML=skills.map(s=>`<span class="skill-badge">${s}</span>`).join('');
+  const expC=document.getElementById('r-experience');expC.innerHTML='';
+  document.querySelectorAll('.exp-block').forEach(bl=>{
+    const t=bl.querySelector('input:nth-child(1)').value.trim(),c=bl.querySelector('input:nth-child(2)').value.trim(),r=bl.querySelector('textarea').value.split('\n').filter(x=>x.trim());
+    if(t||c||r.length)expC.innerHTML+=`<div class="exp-item"><strong>${t}</strong> — ${c}<ul>${r.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  });
+  const eduC=document.getElementById('r-education');eduC.innerHTML='';
+  document.querySelectorAll('.edu-block').forEach(bl=>{
+    const d=bl.querySelector('input:nth-child(1)').value.trim(),u=bl.querySelector('input:nth-child(2)').value.trim(),y=bl.querySelector('input:nth-child(3)').value.trim();
+    if(d||u||y)eduC.innerHTML+=`<p><strong>${d}</strong> — ${u} (${y})</p>`;
+  });
+  const prjC=document.getElementById('r-projects');prjC.innerHTML='';
+  document.querySelectorAll('.project-block').forEach(bl=>{
+    const t=bl.querySelector('input:nth-child(1)').value.trim(),o=bl.querySelector('input:nth-child(2)').value.trim(),d=bl.querySelector('textarea').value.split('\n').filter(x=>x.trim());
+    if(t||o||d.length)prjC.innerHTML+=`<div class="exp-item"><strong>${t}</strong> — ${o}<ul>${d.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  });
+  const certs=nameField('certifications').split('\n').filter(c=>c.trim());
+  document.getElementById('r-certifications').innerHTML=certs.map(c=>`<li>${c}</li>`).join('');
+  const ach=nameField('achievements').split('\n').filter(a=>a.trim());
+  document.getElementById('r-achievements').innerHTML=ach.map(a=>`<li>${a}</li>`).join('');
+  const langs=nameField('languages').split(',').map(l=>l.trim()).filter(Boolean);
+  document.getElementById('r-languages').innerText=langs.join(', ');
+  document.querySelectorAll('#resume section').forEach((s,i)=>{s.style.animation=`fadeUp .4s ease ${i*.07}s both`;});
+  showToast('Resume generated! 🎉','success');
+}
+
+function downloadPDF(){
+  html2pdf().from(document.getElementById('resume')).save('resume.pdf');
+  showToast('Downloading PDF...','success');
+}
+function downloadDOCX(){
+  const c=document.getElementById('resume').innerHTML;
+  const blob=htmlDocx.asBlob(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial;padding:20px;}h2{text-align:center;}h3{margin-top:18px;}ul{margin:4px 0;}</style></head><body>${c}</body></html>`);
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='resume.docx';document.body.appendChild(a);a.click();document.body.removeChild(a);
+  showToast('Downloading DOCX...','success');
+}
+function toggleDarkMode(){
+  document.body.classList.toggle('light');
+  const on=document.body.classList.contains('light');
+  document.getElementById('darkBtn').textContent=on?'🌙':'☀️';
+  if(on){document.body.style.background='#f0eff5';document.body.style.color='#0d0d1a';}
+  else{document.body.style.background='';document.body.style.color='';}
+}
+function showToast(msg,type='info'){const old=document.querySelector('.toast');if(old)old.remove();const t=document.createElement('div');t.className=`toast ${type}`;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
+
+/* Canvas BG */
+const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
+let W,H;function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const pts=[];
+class P{constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.4+.3;this.vx=(Math.random()-.5)*.15;this.vy=(Math.random()-.5)*.15;this.a=Math.random()*.2+.04;}
+update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W)this.vx*=-1;if(this.y<0||this.y>H)this.vy*=-1;}
+draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(212,168,67,${this.a})`;ctx.fill();}}
+for(let i=0;i<55;i++)pts.push(new P());
+(function anim(){requestAnimationFrame(anim);ctx.fillStyle='#0b0b12';ctx.fillRect(0,0,W,H);const g=ctx.createRadialGradient(W*.2,H*.1,0,W*.2,H*.1,W*.5);g.addColorStop(0,'rgba(212,168,67,0.04)');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);pts.forEach(p=>{p.update();p.draw();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<110){ctx.strokeStyle=`rgba(212,168,67,${.04*(1-d/110)})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();}}})();
+</script>
+</body>
+</html>

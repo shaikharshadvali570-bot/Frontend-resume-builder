@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="zA0P8lJl9EuT67-JSsLpk-x3lONjArnYpUbRSvkul40" />   
+<title>Elite Resume Builder – Professional ATS Resume Builder</title>
+<meta name="description" content="Build professional resumes with animations. Create, preview, and download as PDF/DOCX.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600&family=Merriweather:wght@700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<!-- PDF & DOCX Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+</head>
+
+<body data-theme="blue">
+
+<!-- ================= LOGIN MODAL ================= -->
+<div id="login-screen" class="login-screen">
+    <div class="login-box">
+        <h2>Welcome Back</h2>
+        <input id="login-email" placeholder="Email">
+        <input id="login-password" type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p class="small-text">Demo Login: any email/password</p>
+    </div>
+</div>
+
+<!-- ================= MAIN CONTAINER ================= -->
+<div class="container" id="main-app" style="display:none;">
+
+    <!-- FORM SECTION -->
+    <div class="form-section">
+        <h2>Elite Resume Builder</h2>
+
+        <input id="name" placeholder="Full Name">
+        <input id="email" placeholder="Email">
+        <input id="phone" placeholder="Phone">
+        <input id="location" placeholder="Location">
+        <input id="linkedin" placeholder="LinkedIn URL">
+        <input id="github" placeholder="GitHub URL">
+        <textarea id="summary" placeholder="Professional Summary"></textarea>
+
+        <select id="template">
+            <option value="classic">Classic</option>
+            <option value="modern">Modern</option>
+            <option value="minimal">Minimal</option>
+        </select>
+
+        <h3>Skills</h3>
+        <textarea id="skills" placeholder="Comma separated"></textarea>
+
+        <h3>Tools</h3>
+        <textarea id="tools" placeholder="Comma separated"></textarea>
+
+        <h3>Soft Skills</h3>
+        <textarea id="softskills" placeholder="Comma separated"></textarea>
+
+        <h3>Education</h3>
+        <div id="education-section">
+            <div class="edu-block">
+                <input placeholder="Degree">
+                <input placeholder="University">
+                <input placeholder="Year">
+                <button class="remove-btn" onclick="removeBlock(this)">Remove</button>
+            </div>
+        </div>
+        <button onclick="addEducation()">Add Education</button>
+
+        <h3>Experience</h3>
+        <div id="experience-section">
+            <div class="exp-block">
+                <input placeholder="Job Title">
+                <input placeholder="Company">
+                <textarea placeholder="Responsibilities"></textarea>
+                <button class="remove-btn" onclick="removeBlock(this)">Remove</button>
+            </div>
+        </div>
+        <button onclick="addExperience()">Add Experience</button>
+
+        <h3>Projects</h3>
+        <div id="projects-section">
+            <div class="project-block">
+                <input placeholder="Project Title">
+                <input placeholder="Organization">
+                <textarea placeholder="Description"></textarea>
+                <button class="remove-btn" onclick="removeBlock(this)">Remove</button>
+            </div>
+        </div>
+        <button onclick="addProject()">Add Project</button>
+
+        <h3>Certifications</h3>
+        <textarea id="certifications"></textarea>
+
+        <h3>Achievements</h3>
+        <textarea id="achievements"></textarea>
+
+        <h3>Languages</h3>
+        <input id="languages">
+
+        <button onclick="generateResume()">Generate Resume</button>
+        <button onclick="downloadPDF()">Download PDF</button>
+        <button onclick="downloadDOCX()">Download DOCX</button>
+        <button onclick="saveResume()">Save Resume</button>
+        <button onclick="loadResume()">Load Resume</button>
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+        <button onclick="checkATS()">Check ATS Score</button>
+        <div id="ats-score"></div>
+        <ul id="ats-tips"></ul>
+    </div>
+
+    <!-- RESUME PREVIEW -->
+    <div id="resume" class="resume template-classic">
+        <div class="resume-header">
+            <h2 id="r-name"></h2>
+            <p id="r-contact"></p>
+        </div>
+
+        <section>
+            <h3>Summary</h3>
+            <p id="r-summary"></p>
+        </section>
+
+        <section>
+            <h3>Skills</h3>
+            <div id="r-skills"></div>
+        </section>
+
+        <section>
+            <h3>Tools</h3>
+            <p id="r-tools"></p>
+        </section>
+
+        <section>
+            <h3>Experience</h3>
+            <div id="r-experience"></div>
+        </section>
+
+        <section>
+            <h3>Projects</h3>
+            <div id="r-projects"></div>
+        </section>
+
+        <section>
+            <h3>Education</h3>
+            <div id="r-education"></div>
+        </section>
+
+        <section>
+            <h3>Certifications</h3>
+            <ul id="r-certifications"></ul>
+        </section>
+
+        <section>
+            <h3>Achievements</h3>
+            <ul id="r-achievements"></ul>
+        </section>
+
+        <section>
+            <h3>Languages</h3>
+            <p id="r-languages"></p>
+        </section>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

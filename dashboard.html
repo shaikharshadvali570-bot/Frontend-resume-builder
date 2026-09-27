@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumeForge — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--ink:#0b0b12;--gold:#d4a843;--gold2:#f0c85a;--goldDim:rgba(212,168,67,0.1);--cream:#ede8dc;--muted:#7a7060;--border:rgba(212,168,67,0.16);--card:rgba(255,255,255,0.03);--green:#4ecb7a;}
+html{height:100%;}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+#bg{position:fixed;inset:0;z-index:0;}
+body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.4;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(11,11,18,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);animation:fadeIn .5s ease;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:10px;}.nav-logo span{color:var(--gold);}
+.nav-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;animation:pulse 2.5s infinite;flex-shrink:0;}
+.nav-right{display:flex;align-items:center;gap:14px;}
+.nav-user{font-size:.83rem;color:var(--muted);}.nav-user strong{color:var(--gold);}
+.btn-nav{font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;padding:8px 18px;border-radius:8px;cursor:pointer;transition:all .25s;border:1px solid var(--border);background:transparent;color:var(--cream);}
+.btn-nav:hover{border-color:var(--gold);color:var(--gold);}
+.btn-nav.primary{background:linear-gradient(135deg,var(--gold),#b8872a);color:#0b0b12;border:none;box-shadow:0 4px 16px rgba(212,168,67,0.22);}
+.btn-nav.primary:hover{transform:translateY(-1px);box-shadow:0 7px 24px rgba(212,168,67,0.36);}
+.hero{position:relative;z-index:2;padding:70px 48px 46px;animation:fadeUp .8s ease;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--goldDim);border:1px solid var(--border);border-radius:50px;padding:5px 16px;font-size:.74rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:22px;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.6rem);font-weight:700;line-height:1.05;color:#fff;margin-bottom:14px;}.hero h1 em{color:var(--gold);font-style:italic;}
+.hero p{font-size:.98rem;color:var(--muted);max-width:480px;line-height:1.65;}
+.main{position:relative;z-index:2;padding:0 48px 80px;}
+.section-title{font-size:.71rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:15px;margin-bottom:46px;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;animation:fadeUp .6s ease both;}
+.stat:nth-child(2){animation-delay:.06s;}.stat:nth-child(3){animation-delay:.12s;}.stat:nth-child(4){animation-delay:.18s;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:700;color:var(--gold);margin-bottom:4px;}
+.stat-label{font-size:.76rem;color:var(--muted);}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px;margin-bottom:46px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;position:relative;overflow:hidden;cursor:pointer;transition:all .35s cubic-bezier(.4,0,.2,1);animation:fadeUp .6s ease both;}
+.card:nth-child(2){animation-delay:.08s;}.card:nth-child(3){animation-delay:.16s;}.card:nth-child(4){animation-delay:.24s;}
+.card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(212,168,67,0.07),transparent 65%);opacity:0;transition:opacity .4s;}
+.card:hover::before{opacity:1;}
+.card:hover{transform:translateY(-6px) scale(1.005);border-color:rgba(212,168,67,0.3);box-shadow:0 20px 50px rgba(0,0,0,0.45),0 0 0 1px rgba(212,168,67,0.1);}
+.card-badge{display:inline-block;font-size:.67rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:3px 10px;border-radius:50px;margin-bottom:14px;}
+.badge-gold{background:var(--goldDim);color:var(--gold);border:1px solid rgba(212,168,67,0.22);}
+.badge-blue{background:rgba(79,142,247,0.1);color:#6aabff;border:1px solid rgba(79,142,247,0.2);}
+.badge-green{background:rgba(78,203,122,0.1);color:var(--green);border:1px solid rgba(78,203,122,0.2);}
+.badge-purple{background:rgba(168,85,247,0.1);color:#c084fc;border:1px solid rgba(168,85,247,0.2);}
+.card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:14px;border:1px solid var(--border);}
+.icon-gold{background:var(--goldDim);}.icon-blue{background:rgba(79,142,247,0.1);}.icon-green{background:rgba(78,203,122,0.08);}.icon-purple{background:rgba(168,85,247,0.1);}
+.card h3{font-size:1rem;font-weight:600;color:#fff;margin-bottom:7px;}
+.card p{font-size:.83rem;color:var(--muted);line-height:1.6;}
+.card-arrow{position:absolute;bottom:24px;right:24px;color:var(--gold);font-size:1rem;opacity:0;transform:translateX(-8px);transition:all .3s ease;}
+.card:hover .card-arrow{opacity:1;transform:translateX(0);}
+.tips{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 30px;animation:fadeUp .7s ease .3s both;}
+.tips h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:#fff;margin-bottom:16px;}
+.tip-list{display:flex;flex-direction:column;gap:10px;}
+.tip{display:flex;align-items:flex-start;gap:13px;padding:12px 15px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.05);transition:border-color .25s;}
+.tip:hover{border-color:var(--border);}
+.tip-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
+.tip-text{font-size:.83rem;color:var(--muted);line-height:1.55;}.tip-text strong{color:var(--cream);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,168,67,0);}50%{box-shadow:0 0 0 6px rgba(212,168,67,0.14);}}
+@media(max-width:768px){nav,.hero,.main{padding-left:20px;padding-right:20px;}.hero{padding-top:36px;}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<nav>
+  <div class="nav-logo"><div class="nav-dot"></div>Resume<span>Forge</span></div>
+  <div class="nav-right">
+    <div class="nav-user">Hello, <strong id="uname">—</strong></div>
+    <button class="btn-nav primary" onclick="window.location.href='builder.html'">Open Builder</button>
+    <button class="btn-nav" onclick="signOut()">Sign Out</button>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-eyebrow">✦ Your Dashboard</div>
+  <h1>Build the resume<br>that gets you <em>hired.</em></h1>
+  <p>Everything you need to craft, optimize, and export a professional resume — in minutes.</p>
+</div>
+<div class="main">
+  <div class="section-title">Quick Stats</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-num">ATS</div><div class="stat-label">Optimized Format</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Resume Templates</div></div>
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">Export Formats</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Free Edits</div></div>
+  </div>
+  <div class="section-title">Features</div>
+  <div class="cards">
+    <div class="card" onclick="window.location.href='builder.html'"><div class="card-icon icon-gold">📝</div><div class="card-badge badge-gold">Start Here</div><h3>Resume Builder</h3><p>Fill in your details and watch your professional resume come to life in real time.</p><div class="card-arrow">→</div></div>
+    <div class="card" onclick="window.location.href='builder.html'"><div class="card-icon icon-blue">⚡</div><div class="card-badge badge-blue">ATS Ready</div><h3>ATS Score Checker</h3><p>Instantly see how well your resume performs against Applicant Tracking Systems.</p><div class="card-arrow">→</div></div>
+    <div class="card" onclick="window.location.href='builder.html'"><div class="card-icon icon-green">📥</div><div class="card-badge badge-green">Export</div><h3>PDF & DOCX Download</h3><p>Export your polished resume in PDF or Word format — ready to send instantly.</p><div class="card-arrow">→</div></div>
+    <div class="card" onclick="window.location.href='builder.html'"><div class="card-icon icon-purple">🎨</div><div class="card-badge badge-purple">Style</div><h3>Multiple Templates</h3><p>Choose from Classic, Modern and Minimal layouts to match your industry and style.</p><div class="card-arrow">→</div></div>
+  </div>
+  <div class="section-title">Resume Tips</div>
+  <div class="tips">
+    <h3>Pro Tips to Get Noticed</h3>
+    <div class="tip-list">
+      <div class="tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>Use keywords from the job description.</strong> ATS filters look for specific terms — mirror the language of the posting.</div></div>
+      <div class="tip"><div class="tip-icon">📏</div><div class="tip-text"><strong>Keep it to one page</strong> unless you have 10+ years of experience. Recruiters spend under 10 seconds on a first pass.</div></div>
+      <div class="tip"><div class="tip-icon">📊</div><div class="tip-text"><strong>Quantify your achievements.</strong> "Increased sales by 40%" beats "responsible for sales" every time.</div></div>
+      <div class="tip"><div class="tip-icon">🔗</div><div class="tip-text"><strong>Always include LinkedIn and GitHub.</strong> Recruiters check these — make sure they're polished too.</div></div>
+    </div>
+  </div>
+</div>
+<script>
+const u=localStorage.getItem('rf_user');
+if(!localStorage.getItem('rf_session'))window.location.href='login.html';
+document.getElementById('uname').textContent=u||'User';
+function signOut(){localStorage.removeItem('rf_session');window.location.href='login.html';}
+const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
+let W,H,pts=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+class P{constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.5+.3;this.vx=(Math.random()-.5)*.18;this.vy=(Math.random()-.5)*.18;this.a=Math.random()*.22+.05;}
+update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W)this.vx*=-1;if(this.y<0||this.y>H)this.vy*=-1;}
+draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(212,168,67,${this.a})`;ctx.fill();}}
+for(let i=0;i<65;i++)pts.push(new P());
+(function anim(){requestAnimationFrame(anim);ctx.fillStyle='#0b0b12';ctx.fillRect(0,0,W,H);const g=ctx.createRadialGradient(W*.5,0,0,W*.5,0,H*.7);g.addColorStop(0,'rgba(212,168,67,0.04)');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);pts.forEach(p=>{p.update();p.draw();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<120){ctx.strokeStyle=`rgba(212,168,67,${.04*(1-d/120)})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();}}})();
+</script>
+</body>
+</html>

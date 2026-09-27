@@ -1,0 +1,403 @@
+/* =====================================================
+   ELITE RESUME BUILDER - HUMANIZED PROFESSIONAL CSS
+   Clean • Readable • Maintainable • Dark Mode Ready
+===================================================== */
+
+
+/* ================================
+   GOOGLE FONTS IMPORT
+================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700&family=Merriweather:wght@700&family=Playfair+Display:wght@700&display=swap');
+
+
+/* ================================
+   ROOT VARIABLES (DEFAULT THEME)
+================================ */
+:root{
+
+    /* Brand Colors */
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --accent: #0ea5e9;
+
+    /* Text Colors */
+    --text-dark: #111827;
+    --text-light: #6b7280;
+
+    /* Background Colors */
+    --bg-main: #eef2ff;
+    --bg-white: #ffffff;
+    --bg-soft: #f3f4f6;
+
+    /* Borders & Effects */
+    --border: #e5e7eb;
+    --radius: 16px;
+    --shadow: 0 10px 30px rgba(0,0,0,0.08);
+
+    /* Animation */
+    --transition: all 0.3s ease;
+}
+
+
+/* ================================
+   DARK THEME
+================================ */
+[data-theme="dark"]{
+
+    --primary: #3b82f6;
+    --primary-dark: #60a5fa;
+    --accent: #22c55e;
+
+    --text-dark: #f1f5f9;
+    --text-light: #cbd5e1;
+
+    --bg-main: #0f172a;
+    --bg-white: #1e293b;
+    --bg-soft: #334155;
+
+    --border: #334155;
+}
+
+
+/* ================================
+   BLUE THEME
+================================ */
+[data-theme="blue"]{
+
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --accent: #1d4ed8;
+
+    --bg-main: #eff6ff;
+    --bg-soft: #dbeafe;
+}
+
+
+/* ================================
+   GREEN THEME
+================================ */
+[data-theme="green"]{
+
+    --primary: #059669;
+    --primary-dark: #047857;
+    --accent: #10b981;
+
+    --bg-main: #ecfdf5;
+    --bg-soft: #d1fae5;
+}
+
+
+/* ================================
+   PURPLE THEME
+================================ */
+[data-theme="purple"]{
+
+    --primary: #7c3aed;
+    --primary-dark: #6d28d9;
+    --accent: #8b5cf6;
+
+    --bg-main: #faf5ff;
+    --bg-soft: #ede9fe;
+}
+
+
+/* ================================
+   RESET DEFAULT BROWSER STYLE
+================================ */
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ================================
+   BODY STYLE
+================================ */
+body{
+
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--bg-main), #f8fafc);
+    color: var(--text-dark);
+
+    padding: 40px;
+
+    transition: var(--transition);
+}
+
+
+/* ================================
+   FONT STYLE OPTIONS
+================================ */
+
+body.corporate{
+    font-family: 'Inter', sans-serif;
+}
+
+body.modern{
+    font-family: 'Poppins', sans-serif;
+}
+
+body.elegant{
+    font-family: 'Playfair Display', serif;
+}
+
+body.academic{
+    font-family: 'Merriweather', serif;
+}
+
+
+/* ================================
+   MAIN CONTAINER LAYOUT
+================================ */
+.container{
+
+    max-width: 1400px;
+    margin: auto;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 50px;
+}
+
+
+/* ================================
+   FORM SECTION
+================================ */
+.form-section{
+
+    flex: 1;
+    min-width: 380px;
+
+    background: var(--bg-white);
+
+    padding: 40px;
+
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
+
+    transition: var(--transition);
+}
+
+.form-section:hover{
+    transform: translateY(-5px);
+}
+
+
+/* ================================
+   INPUT FIELDS
+================================ */
+input,
+textarea,
+select{
+
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 14px;
+
+    border-radius: 12px;
+    border: 1px solid var(--border);
+
+    background: var(--bg-soft);
+
+    font-size: 15px;
+
+    transition: var(--transition);
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+
+    border-color: var(--primary);
+    background: var(--bg-white);
+
+    outline: none;
+}
+.fade{
+animation:fade 0.8s ease;
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+button:active{
+transform:scale(0.95);
+}
+
+
+/* ================================
+   BUTTON STYLE
+================================ */
+button{
+
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+
+    color: white;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 14px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+button:hover{
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+
+/* ================================
+   RESUME PREVIEW SECTION
+================================ */
+.resume{
+
+    flex: 1;
+    min-width: 380px;
+
+    background: var(--bg-white);
+
+    padding: 60px;
+
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
+}
+
+
+/* ================================
+   RESUME HEADER
+================================ */
+.resume-header{
+
+    text-align: center;
+
+    margin-bottom: 40px;
+
+    border-bottom: 3px solid var(--primary);
+
+    padding-bottom: 15px;
+}
+
+.resume-header h2{
+
+    font-size: 34px;
+    font-weight: 700;
+}
+
+
+/* ================================
+   SECTION TITLES
+================================ */
+.resume h3{
+
+    font-size: 15px;
+    text-transform: uppercase;
+
+    margin-top: 30px;
+    margin-bottom: 10px;
+
+    color: var(--primary);
+
+    letter-spacing: 1px;
+}
+
+
+/* ================================
+   SKILL BADGES
+================================ */
+.skill-badge{
+
+    display: inline-block;
+
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+    color: white;
+
+    padding: 6px 14px;
+    margin: 4px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+}
+
+
+/* ================================
+   EXPERIENCE ITEM
+================================ */
+.exp-item{
+
+    border-left: 3px solid var(--primary);
+
+    padding-left: 15px;
+
+    margin-bottom: 20px;
+}
+
+
+/* ================================
+   THEME SWITCHER BUTTONS
+================================ */
+.theme-switcher{
+
+    position: fixed;
+
+    top: 20px;
+    right: 20px;
+
+    z-index: 1000;
+}
+
+.theme-switcher button{
+
+    padding: 6px 10px;
+    margin: 2px;
+
+    font-size: 13px;
+
+    border-radius: 6px;
+}
+
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+@media (max-width: 900px){
+
+    .container{
+        flex-direction: column;
+    }
+
+    .resume{
+        padding: 30px;
+    }
+
+    body{
+        padding: 20px;
+    }
+}
